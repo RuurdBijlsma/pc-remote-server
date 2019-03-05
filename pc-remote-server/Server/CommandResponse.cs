@@ -1,7 +1,12 @@
+using Newtonsoft.Json;
+
 namespace pc_remote_server.Server
 {
-    public class CommandResponse
+    public struct CommandResponse
     {
-        
+        [JsonProperty("id")]
+        public int Id;
+        [JsonProperty("data")]
+        public string Data;
     }
 }
