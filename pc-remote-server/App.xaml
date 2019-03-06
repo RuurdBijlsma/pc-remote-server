@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:pc_remote_server"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>

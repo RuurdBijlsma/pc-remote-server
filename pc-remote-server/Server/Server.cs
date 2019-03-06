@@ -10,8 +10,8 @@ namespace pc_remote_server.Server
 {
     public abstract class Server
     {
-        private readonly CancellationTokenSource _token;
         private readonly List<Task> _runningTasks = new List<Task>();
+        private readonly CancellationTokenSource _token;
 
         protected Server(IPEndPoint endpoint)
         {
@@ -41,7 +41,6 @@ namespace pc_remote_server.Server
         {
             Console.WriteLine("Accepting clients");
             while (!token.IsCancellationRequested)
-            {
                 try
                 {
                     var ws = await server.AcceptWebSocketAsync(token).ConfigureAwait(false);
@@ -52,7 +51,6 @@ namespace pc_remote_server.Server
                 {
                     Console.WriteLine("Error Accepting clients: " + aex.GetBaseException().Message);
                 }
-            }
 
             Console.WriteLine("Server Stop accepting clients");
         }

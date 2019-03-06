@@ -7,7 +7,7 @@
         <ProjectGuid>{3076F702-E9B1-4116-A055-75601D62B359}</ProjectGuid>
         <OutputType>WinExe</OutputType>
         <RootNamespace>pc_remote_server</RootNamespace>
-        <AssemblyName>pc_remote_server</AssemblyName>
+        <AssemblyName>PcRemote Server</AssemblyName>
         <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -49,10 +49,12 @@
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
+        <Reference Include="System.Drawing" />
         <Reference Include="System.Threading.Tasks.Dataflow, Version=4.6.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
           <HintPath>..\packages\System.Threading.Tasks.Dataflow.4.8.0\lib\netstandard2.0\System.Threading.Tasks.Dataflow.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="System.Windows.Forms" />
         <Reference Include="System.Xml" />
         <Reference Include="System.Xaml">
             <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -72,9 +74,14 @@
         </ApplicationDefinition>
         <Compile Include="Server\Command.cs" />
         <Compile Include="Server\CommandResponse.cs" />
+        <Compile Include="Server\ExtensionMethods.cs" />
+        <Compile Include="Server\InputDevices\KeyboardController.cs" />
+        <Compile Include="Server\InputDevices\MouseController.cs" />
+        <Compile Include="Server\Power\PowerController.cs" />
         <Compile Include="Server\RemoteServer.cs" />
         <Compile Include="Server\Server.cs" />
-        <Compile Include="Server\VolumeController.cs" />
+        <Compile Include="Server\Volume\VolumeController.cs" />
+        <Compile Include="Server\Volume\VolumeMixerController.cs" />
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
@@ -105,6 +112,11 @@
     <ItemGroup>
         <None Include="App.config" />
         <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="res\remoteicon.ico">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
