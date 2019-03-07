@@ -12,7 +12,7 @@ namespace pc_remote_server.Server
     public class VolumeController
     {
         private static VolumeController _instance;
-        public readonly CoreAudioDevice PlaybackDevice;
+        public CoreAudioDevice PlaybackDevice;
         private List<VolumeMixerController.VolumeControl> _controls;
         private bool _mixerInitiated;
 
@@ -23,6 +23,12 @@ namespace pc_remote_server.Server
             Debug.WriteLine("Instantiating volume controller");
             // Retrieve default playback device
             PlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
+            
+            var timer = new Timer(2000) {Enabled = true, AutoReset = true};
+            timer.Elapsed += (sender, args) => PlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
+            timer.Start();
+            
+            Console.WriteLine("HELO");
         }
 
         public static VolumeController Instance => _instance ?? (_instance = new VolumeController());
@@ -38,7 +44,7 @@ namespace pc_remote_server.Server
             var timer = new Timer(2000) {Enabled = true, AutoReset = true};
             timer.Elapsed += (sender, args) => RefreshVolumeProcesses();
             timer.Start();
-            Debug.WriteLine("Instantiated volume controller");
+            Debug.WriteLine("Instantiated mixer");
         }
 
         private void RefreshVolumeProcesses()

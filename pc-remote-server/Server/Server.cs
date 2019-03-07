@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace pc_remote_server.Server
             server.Standards.RegisterStandard(rfc6455);
             server.StartAsync(cancellation.Token).ConfigureAwait(false);
 
-            Console.WriteLine("Echo Server started at " + endpoint);
+            Debug.WriteLine("Echo Server started at " + endpoint);
 
             var task = Task.Run(() => AcceptWebSocketClientsAsync(server, cancellation.Token), cancellation.Token);
             _runningTasks.Add(task);
@@ -31,7 +32,7 @@ namespace pc_remote_server.Server
 
         public void Stop()
         {
-            Console.WriteLine("Server stopping");
+            Debug.WriteLine("Server stopping");
             _token.Cancel();
             _runningTasks.ForEach(t => t.Wait(_token.Token));
             _runningTasks.Clear();
@@ -39,20 +40,22 @@ namespace pc_remote_server.Server
 
         private async Task AcceptWebSocketClientsAsync(WebSocketListener server, CancellationToken token)
         {
-            Console.WriteLine("Accepting clients");
+            Debug.WriteLine("Accepting clients");
             while (!token.IsCancellationRequested)
                 try
                 {
                     var ws = await server.AcceptWebSocketAsync(token).ConfigureAwait(false);
                     if (ws != null)
-                        Task.Run(() => HandleConnectionAsync(ws, token), token).ConfigureAwait(false);
+                        Task.Run(
+                            () => HandleConnectionAsync(ws, token).ConfigureAwait(false), token
+                        ).ConfigureAwait(false);
                 }
                 catch (Exception aex)
                 {
-                    Console.WriteLine("Error Accepting clients: " + aex.GetBaseException().Message);
+                    Debug.WriteLine("Error Accepting clients: " + aex.GetBaseException().Message);
                 }
 
-            Console.WriteLine("Server Stop accepting clients");
+            Debug.WriteLine("Server Stop accepting clients");
         }
 
         private async Task HandleConnectionAsync(WebSocket ws, CancellationToken cancellation)
@@ -71,7 +74,7 @@ namespace pc_remote_server.Server
             }
             catch (Exception aex)
             {
-                Console.WriteLine("Error Handling connection: " + aex.GetBaseException().Message);
+                Debug.WriteLine("Error Handling connection: " + aex.GetBaseException().Message);
                 try
                 {
                     ws.Close();

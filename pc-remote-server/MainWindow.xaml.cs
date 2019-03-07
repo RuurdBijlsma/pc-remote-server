@@ -3,12 +3,14 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using pc_remote_server.Server;
+using pc_remote_server.Server.Mouse;
 using Application = System.Windows.Application;
 
 namespace pc_remote_server
@@ -31,6 +33,20 @@ namespace pc_remote_server
 
             CreateTrayIcon();
             SetAutoStart(false);
+        }
+
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+
+            throw new Exception("No network adapters with an IPv4 address in the system!");
         }
 
         private void SetAutoStart(bool autoStart = true)
@@ -72,7 +88,7 @@ namespace pc_remote_server
             {
                 Icon = new Icon("res/remoteicon.ico"),
                 ContextMenu = contextMenu1,
-                Text = "PcRemote Server",
+                Text = "IP: "+GetLocalIPAddress(),
                 Visible = true
             };
             nIcon.DoubleClick += (sender, args) => Debug.WriteLine("Double clicked icon");
