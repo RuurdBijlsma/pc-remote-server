@@ -32,7 +32,9 @@ namespace pc_remote_server
             Icon = new BitmapImage(new Uri("res/remoteicon.ico", UriKind.Relative));
 
             CreateTrayIcon();
-            SetAutoStart(false);
+#if !DEBUG
+            SetAutoStart();
+#endif
         }
 
         public static string GetLocalIPAddress()
