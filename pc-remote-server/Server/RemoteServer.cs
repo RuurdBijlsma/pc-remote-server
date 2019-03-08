@@ -10,7 +10,7 @@ namespace pc_remote_server.Server
 {
     public class RemoteServer : Server
     {
-        public RemoteServer(IPEndPoint endpoint) : base(endpoint)
+        public RemoteServer(IPEndPoint endPoint) : base(endPoint)
         {
         }
 
